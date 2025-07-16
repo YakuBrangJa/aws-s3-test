@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import axios from 'axios'
 // const domain = "http://localhost:8000/api/generate-upload-url"
 const domain = "http://form-builder-test.judgify.me:90"
@@ -10,6 +10,19 @@ function App () {
     if(!e.target.files || e.target.files.length === 0) return
     setFile(e.target.files[0])
   }
+
+  useEffect(() => {
+    // Optional: Reset uploaded URL when file changes
+    const fetchTest = async () => {
+      try {
+        const response = await axios.get(`${domain}/api/test`)
+        console.log('Test response:', response.data)
+      } catch (error) {
+        console.error('Error fetching test:', error)
+      }
+    }
+    fetchTest()
+  }, [file])
 
   const uploadFile = async () => {
     if(!file) return
