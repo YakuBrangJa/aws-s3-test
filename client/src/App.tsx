@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import axios from 'axios'
-
+// const domain = "http://localhost:8000/api/generate-upload-url"
+const domain = "http://form-builder-test.judgify.me:90"
 function App () {
   const [file, setFile] = useState<File | null>(null)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
@@ -15,7 +16,7 @@ function App () {
 
     try {
       // Step 1: Request pre-signed URL from Laravel
-      const {data} = await axios.post('http://localhost:8000/api/generate-upload-url', {
+      const {data} = await axios.post(`${domain}/api/generate-upload-url`, {
         filename: file.name,
         type: file.type,
       })
