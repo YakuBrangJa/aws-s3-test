@@ -1,0 +1,60 @@
+import {useState} from 'react'
+import axios from 'axios'
+
+function App () {
+  const [file, setFile] = useState<File | null>(null)
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0])
+  }
+
+  const uploadFile = async () => {
+    if(!file) return
+
+    try {
+      // Step 1: Request pre-signed URL from Laravel
+      const {data} = await axios.post('http://localhost:8000/api/generate-upload-url', {
+        filename: file.name,
+        type: file.type,
+      })
+
+      console.log('Pre-signed URL data:', data)
+      // Step 2: PUT the file directly to S3
+      await axios.put(data.url, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      })
+
+      // Step 3: Optional - store file URL or key
+      const publicUrl = `https://${import.meta.env.VITE_S3_BUCKET_NAME}.s3.amazonaws.com/${data.key}`
+      setUploadedUrl(publicUrl)
+      console.log(publicUrl)
+
+      alert('File uploaded successfully!')
+    } catch(err) {
+      console.error(err)
+      alert('Upload failed.')
+    }
+  }
+
+
+
+  return (
+    <div style={{padding: 20}}>
+      <h2>S3 Upload with Pre-signed URL</h2>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={uploadFile}>Upload</button>
+
+      {uploadedUrl && (
+        <div style={{marginTop: 20}}>
+          <p>Uploaded File:</p>
+          <img src={uploadedUrl} alt="Uploaded file" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default App
