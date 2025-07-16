@@ -5,7 +5,8 @@ function App () {
   const [file, setFile] = useState<File | null>(null)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
 
-  const handleFileChange = (e) => {
+  const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if(!e.target.files || e.target.files.length === 0) return
     setFile(e.target.files[0])
   }
 
