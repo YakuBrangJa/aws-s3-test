@@ -18,6 +18,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/test', function(Request $request) {
+  return response()->json(['message' => 'Test successful']);
+});
+
 Route::post('/generate-upload-url', function (Request $request) {
     $request->validate([
         'filename' => 'required|string',
