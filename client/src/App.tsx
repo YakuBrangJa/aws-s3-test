@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
-// const domain = "http://localhost:8000/api/generate-upload-url"
-const domain = "http://form-builder-test.judgify.me:90"
+const domain = "http://localhost:8000"
+// const domain = "http://form-builder-test.judgify.me:90"
 function App () {
   const [file, setFile] = useState<File | null>(null)
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
